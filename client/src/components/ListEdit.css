@@ -1,0 +1,14 @@
+.listEdit{
+    height: 200px;
+    width: 250px;
+    margin-top: 125px;
+    margin-left: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+@media screen and (max-width: 600px){
+    .listEdit{
+        margin-left: 0px;
+    }
+}
