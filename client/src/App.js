@@ -3,11 +3,11 @@ import ListTitle from "./components/ListTitle";
 import ListEdit from "./components/ListEdit";
 import CreateList from "./components/CreateList";
 import LoadingSpin from "react-loading-spin";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./App.css";
 import Axios from "axios";
-import NameInputModal from "./components/NameInputModal"
-
+import NameInputModal from "./components/NameInputModal";
+import LoadingBar from "react-top-loading-bar";
 
 function App() {
   const [listName, setListName] = useState();
@@ -15,31 +15,28 @@ function App() {
   const [listItems, setListItems] = useState();
   const [listList, setListList] = useState();
   const [modalOpen, setModalOpen] = React.useState(false);
-  const [addOrEdit,setAddOrEdit]=useState();
+  const [addOrEdit, setAddOrEdit] = useState();
   const handleOpen = () => setModalOpen(true);
   const handleClose = () => setModalOpen(false);
-  
 
-  // Axios.defaults.baseURL = "https://sleepy-ridge-02151.herokuapp.com";
-  Axios.defaults.baseURL = "http://localhost:3000";
+  const ref = useRef(null);
+
+  Axios.defaults.baseURL = "https://sleepy-ridge-02151.herokuapp.com";
+  // Axios.defaults.baseURL = "http://localhost:3000";
 
   useEffect(() => {
-    console.log('first effect triggered')
+    console.log("first effect triggered");
     Axios.get("/getListList").then((res) => {
       setListList(res.data.lists);
     });
   }, []);
 
   useEffect(() => {
-    console.log('second effect triggered')
+    console.log("second effect triggered");
     Axios.get("/getFirstList").then((res) => {
       changeList(res.data.id);
     });
   }, []);
-
-  function changeListName(newName) {
-    setListName(newName);
-  }
 
   function deleteItem(itemIndex) {
     listItems.splice(itemIndex, 1);
@@ -61,71 +58,83 @@ function App() {
   }
 
   function changeList(id) {
-    console.log('who does not like a change');
-    const url = "/getList/".concat(id);
-    Axios.get(url).then((res) => {
-      setListName(res.data.name);
-      setListItems(res.data.items);
-      setListID(res.data._id);
+    return new Promise((resolve, rej) => {
+      console.log("who does not like a change");
+      const url = "/getList/".concat(id);
+      Axios.get(url).then((res) => {
+        setListName(res.data.name);
+        setListItems(res.data.items);
+        setListID(res.data._id);
+        resolve();
+      });
+    });
+  }
+
+  function changeTheList(id) {
+    ref.current.continuousStart();
+    changeList(id).then(() => {
+      ref.current.complete();
     });
   }
 
   function createList(listName) {
+    ref.current.continuousStart();
     const url = "/createList";
     Axios.post(url, { listName: listName }).then((res) => {
       changeList(res.data.id);
-      setListList([...listList,{id:res.data.id,name:listName}]);
+      setListList([...listList, { id: res.data.id, name: listName }]);
+      ref.current.complete();
     });
   }
 
-  function deleteList(){
-    console.log('delete list triggered');
-    const url="/deleteList/".concat(listID);
-    Axios.delete(url,{listID:listID}).then((res)=>{
+  function deleteList() {
+    ref.current.continuousStart();
+    console.log("delete list triggered");
+    const url = "/deleteList/".concat(listID);
+    Axios.delete(url, { listID: listID }).then((res) => {
       Axios.get("/getFirstList").then((res) => {
         changeList(res.data.id);
-        const newListList=listList.filter(list=>
-          list.id!==listID
-        )
-        setListList([...newListList])
+        const newListList = listList.filter((list) => list.id !== listID);
+        setListList([...newListList]);
+        ref.current.complete();
       });
     });
   }
 
-  function editListName(newName){
-    console.log('edit list name triggered');
-    const url="/updateListName/".concat(listID);
-    Axios.patch(url,{newListName:newName}).then((res)=>{
+  function editListName(newName) {
+    ref.current.continuousStart();
+    console.log("edit list name triggered");
+    const url = "/updateListName/".concat(listID);
+    Axios.patch(url, { newListName: newName }).then((res) => {
       setListName(newName);
-      listList.forEach(list => {
-        if(list.id===listID)
-          list.name=newName;
+      listList.forEach((list) => {
+        if (list.id === listID) list.name = newName;
       });
       setListList(listList);
-    })
+      ref.current.complete();
+    });
   }
 
-  function handleOKButtonClick(newListName){
+  function handleOKButtonClick(newListName) {
     setModalOpen(false);
-    if(addOrEdit==="a")
-      createList(newListName);
-    else
-      editListName(newListName);
+    if (addOrEdit === "a") createList(newListName);
+    else editListName(newListName);
   }
 
-  function handleAddIconClick(){
-    setAddOrEdit('a');
+  function handleAddIconClick() {
+    setAddOrEdit("a");
     handleOpen();
   }
 
-  function handleEditIconClick(){
-    setAddOrEdit('e');
+  function handleEditIconClick() {
+    setAddOrEdit("e");
     handleOpen();
   }
 
   return listList ? (
     listList.length !== 0 ? (
       <div className="topContainer">
+        <LoadingBar color="#f11946" ref={ref} />
         <div>
           {listName && <ListTitle listName={listName} />}
           {listItems && (
@@ -141,13 +150,19 @@ function App() {
             selectedName={listName}
             selectedID={listID}
             listList={listList}
-            listChange={changeList}
+            listChange={changeTheList}
             handleAddIcon={handleAddIconClick}
             handleDeleteIcon={deleteList}
             handleEditIcon={handleEditIconClick}
+            ref={ref}
           />
         )}
-        <NameInputModal open={modalOpen} handleOpen={handleOpen} handleClose={handleClose} handleOKButtonClick={handleOKButtonClick}/>
+        <NameInputModal
+          open={modalOpen}
+          handleOpen={handleOpen}
+          handleClose={handleClose}
+          handleOKButtonClick={handleOKButtonClick}
+        />
       </div>
     ) : (
       <div className="topContainer" style={{ alignItems: "center" }}>
@@ -156,7 +171,7 @@ function App() {
     )
   ) : (
     <div className="topContainer" style={{ alignItems: "center" }}>
-      <div style={{ marginTop : "125px" }}>
+      <div style={{ marginTop: "125px" }}>
         <LoadingSpin size="30px" />
       </div>
     </div>
