@@ -5,6 +5,7 @@ import TextField from "@mui/material/TextField";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import LoadingSpin from "react-loading-spin";
+import "./CreateList.css"
 function CreateList(props) {
   const [userInput, setUserInput] = useState("");
   const [buttonVisible, setButtonVisible] = useState(true);
@@ -18,13 +19,13 @@ function CreateList(props) {
     props.createList(userInput);
   }
   return (
-    <div>
+    <div style={{display:"flex",justifyContent:"center",flexWrap :"wrap"}}>
       <ListTitle listName="Create List" />
       <Paper
         elevation={3}
+        className="createListTopContainer"
         style={{
           height: "100px",
-          width: "400px",
           margin: "25px 0 0",
           display: "flex",
           justifyContent: "space-evenly",
@@ -32,7 +33,7 @@ function CreateList(props) {
         }}
       >
         <TextField
-          style={{ width: "270px" }}
+          className="newListInput"
           label="Add list"
           value={userInput}
           onChange={handleTextChange}

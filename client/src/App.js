@@ -166,6 +166,7 @@ function App() {
       </div>
     ) : (
       <div className="topContainer" style={{ alignItems: "center" }}>
+      <LoadingBar color="#f11946" ref={ref} />
         <CreateList createList={createList} />
       </div>
     )

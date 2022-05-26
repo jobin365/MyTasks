@@ -1,0 +1,15 @@
+.createListTopContainer{
+    width: 400px;
+
+}
+.newListInput{
+    width: 270px;
+}
+@media screen and (max-width: 600px){
+    .createListTopContainer{
+        width: 350px;
+    }
+    .newListInput{
+        width: 236px;
+    }
+}
