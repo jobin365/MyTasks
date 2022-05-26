@@ -8,6 +8,7 @@ import Checkbox from "@mui/material/Checkbox";
 import TextField from "@mui/material/TextField";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
+import "./ItemList.css";
 
 function ItemList(props) {
   const [userInput,setUserInput]=useState("");
@@ -36,7 +37,7 @@ function ItemList(props) {
   }
 
   return (
-    <Paper elevation={3} style={{ width: "400px", margin: "25px 0 0" }}>
+    <Paper className="itemListTopContainer" elevation={3} style={{ margin: "25px 0 0" }}>
       <List>
         <ListItem
           style={{
@@ -48,7 +49,7 @@ function ItemList(props) {
           }}
         >
           <TextField
-            style={{ width: "270px" }}
+            className="listItemInput"
             label="Add item"
             value={userInput}
             onChange={handleTextChange}

@@ -1,0 +1,16 @@
+.itemListTopContainer{
+    width: 400px;
+}
+
+.listItemInput{
+    width: 270px;
+}
+
+@media screen and (max-width: 600px){
+    .itemListTopContainer{
+        width: 350px;
+    }
+    .listItemInput{
+        width: 236px;
+    }
+}

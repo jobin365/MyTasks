@@ -9,6 +9,7 @@
 }
 @media screen and (max-width: 600px){
     .listEdit{
+        margin-top: 75px;
         margin-left: 0px;
     }
 }
