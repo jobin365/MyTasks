@@ -9,6 +9,7 @@ import Axios from "axios";
 import NameInputModal from "./components/NameInputModal";
 import LoadingBar from "react-top-loading-bar";
 
+
 function App() {
   const [listName, setListName] = useState();
   const [listID, setListID] = useState();
@@ -70,7 +71,7 @@ function App() {
     });
   }
 
-  function changeTheList(id) {
+  function changeListFromOptions(id) {
     ref.current.continuousStart();
     changeList(id).then(() => {
       ref.current.complete();
@@ -150,7 +151,7 @@ function App() {
             selectedName={listName}
             selectedID={listID}
             listList={listList}
-            listChange={changeTheList}
+            listChange={changeListFromOptions}
             handleAddIcon={handleAddIconClick}
             handleDeleteIcon={deleteList}
             handleEditIcon={handleEditIconClick}
