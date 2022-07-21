@@ -1,0 +1,26 @@
+.roltopContainer{
+    width: 400px;
+}
+.username,.password{
+    width: 270px;
+}
+.lorButton{
+    width: 190px;
+}
+.lorButtons{
+    margin-top: 25px;
+    width: 400px;
+    display: flex;
+    justify-content: space-between;
+}
+@media screen and (max-width: 600px){
+    .roltopContainer{
+        width: 300px;
+    }
+    .lorButtons{
+        width: 350px;
+    }
+    .lorButton{
+        width: 170px;
+    }
+}

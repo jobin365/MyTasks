@@ -1,15 +1,14 @@
-.createListTopContainer{
-    width: 400px;
-
+.createListTopContainer {
+  width: 400px;
 }
-.newListInput{
-    width: 270px;
+.newListInput {
+  width: 270px;
 }
-@media screen and (max-width: 600px){
-    .createListTopContainer{
-        width: 350px;
-    }
-    .newListInput{
-        width: 236px;
-    }
+@media screen and (max-width: 600px) {
+  .createListTopContainer {
+    width: 300px;
+  }
+  .newListInput {
+    width: 236px;
+  }
 }

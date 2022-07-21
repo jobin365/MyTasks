@@ -8,7 +8,7 @@ import "./App.css";
 import Axios from "axios";
 import NameInputModal from "./components/NameInputModal";
 import LoadingBar from "react-top-loading-bar";
-
+import RegisterOrLogin from "./components/RegisterOrLogin";
 
 function App() {
   const [listName, setListName] = useState();
@@ -19,6 +19,7 @@ function App() {
   const [addOrEdit, setAddOrEdit] = useState();
   const handleOpen = () => setModalOpen(true);
   const handleClose = () => setModalOpen(false);
+  const [userLoggedin,setLogin] = useState(true);
 
   const ref = useRef(null);
 
@@ -132,50 +133,56 @@ function App() {
     handleOpen();
   }
 
-  return listList ? (
-    listList.length !== 0 ? (
-      <div className="topContainer">
-        <LoadingBar color="#f11946" ref={ref} />
-        <div>
-          {listName && <ListTitle listName={listName} />}
-          {listItems && (
-            <ItemList
-              listItems={listItems}
-              deleteItem={deleteItem}
-              addItem={addItem}
+  return userLoggedin? (
+    listList ? (
+      listList.length !== 0 ? (
+        <div className="topContainer">
+          <LoadingBar color="#f11946" ref={ref} />
+          <div>
+            {listName && <ListTitle listName={listName} />}
+            {listItems && (
+              <ItemList
+                listItems={listItems}
+                deleteItem={deleteItem}
+                addItem={addItem}
+              />
+            )}
+          </div>
+          {listName && listItems && listID && listList && (
+            <ListEdit
+              selectedName={listName}
+              selectedID={listID}
+              listList={listList}
+              listChange={changeListFromOptions}
+              handleAddIcon={handleAddIconClick}
+              handleDeleteIcon={deleteList}
+              handleEditIcon={handleEditIconClick}
+              ref={ref}
             />
           )}
-        </div>
-        {listName && listItems && listID && listList && (
-          <ListEdit
-            selectedName={listName}
-            selectedID={listID}
-            listList={listList}
-            listChange={changeListFromOptions}
-            handleAddIcon={handleAddIconClick}
-            handleDeleteIcon={deleteList}
-            handleEditIcon={handleEditIconClick}
-            ref={ref}
+          <NameInputModal
+            open={modalOpen}
+            handleOpen={handleOpen}
+            handleClose={handleClose}
+            handleOKButtonClick={handleOKButtonClick}
           />
-        )}
-        <NameInputModal
-          open={modalOpen}
-          handleOpen={handleOpen}
-          handleClose={handleClose}
-          handleOKButtonClick={handleOKButtonClick}
-        />
-      </div>
+        </div>
+      ) : (
+        <div className="topContainer" style={{ alignItems: "center" }}>
+          <LoadingBar color="#f11946" ref={ref} />
+          <CreateList createList={createList} />
+        </div>
+      )
     ) : (
       <div className="topContainer" style={{ alignItems: "center" }}>
-      <LoadingBar color="#f11946" ref={ref} />
-        <CreateList createList={createList} />
+        <div style={{ marginTop: "125px" }}>
+          <LoadingSpin size="30px" />
+        </div>
       </div>
     )
   ) : (
     <div className="topContainer" style={{ alignItems: "center" }}>
-      <div style={{ marginTop: "125px" }}>
-        <LoadingSpin size="30px" />
-      </div>
+      <RegisterOrLogin />
     </div>
   );
 }
