@@ -2,10 +2,11 @@
     width: 400px;
 }
 .username,.password{
-    width: 270px;
+    width: 300px;
 }
 .lorButton{
     width: 190px;
+    height: 45px;
 }
 .lorButtons{
     margin-top: 25px;
