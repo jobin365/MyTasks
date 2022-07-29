@@ -168,7 +168,7 @@ app.get("/getList/:listID", (req, res) => {
 
 app.get("/checkLoginStatus", (req, res) => {
   if (req.isAuthenticated()) {
-    res.send({ status: true });
+    res.send({ status: true,username:req.user.username });
   } else {
     res.send({ status: false });
   }

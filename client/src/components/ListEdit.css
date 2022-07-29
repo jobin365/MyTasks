@@ -1,5 +1,5 @@
 .listEdit{
-    height: 250px;
+    height: 275px;
     width: 275px;
     margin-top: 125px;
     margin-left: 50px;
@@ -20,4 +20,9 @@
         margin-top: 75px;
         margin-left: 0px;
     }
+}
+.usernameInfo{
+    margin-top: 10px;
+    color:#1565c0;
+    text-align: center;
 }

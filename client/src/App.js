@@ -20,8 +20,10 @@ function App() {
   const handleOpen = () => setModalOpen(true);
   const handleClose = () => setModalOpen(false);
   const [userLoggedin, setLogin] = useState(false);
+  const [username,setUsername]=useState("");
 
   const ref = useRef(null);
+  
 
   // Axios.defaults.baseURL = "https://sleepy-ridge-02151.herokuapp.com";
   Axios.defaults.baseURL = "http://localhost:3001";
@@ -42,6 +44,9 @@ function App() {
   function checkLoginStatus(){
     Axios.get("/checkLoginStatus",{ withCredentials: true }).then((res)=>{
       setLogin(res.data.status);
+      if(res.data.status){
+        setUsername(res.data.username);
+      }
     });
     Axios.get("/getListList").then((res) => {
       setListList(res.data.lists);
@@ -176,6 +181,7 @@ function App() {
                 handleDeleteIcon={deleteList}
                 handleEditIcon={handleEditIconClick}
                 logout={logout}
+                username={username}
               />
             )}
             <NameInputModal
@@ -188,7 +194,7 @@ function App() {
         ) : (
           <div className="topContainer" style={{ alignItems: "center" }}>
             <LoadingBar color="#f11946" ref={ref} />
-            <CreateList createList={createList} />
+            <CreateList username={username} createList={createList} logout={logout}/>
           </div>
         )
       ) : (

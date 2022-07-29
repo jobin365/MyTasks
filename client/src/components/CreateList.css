@@ -4,6 +4,10 @@
 .newListInput {
   width: 270px;
 }
+.logoutButtonEmptyList{
+  width: 150px;
+  background-color: #D61C4E;
+}
 @media screen and (max-width: 600px) {
   .createListTopContainer {
     width: 300px;
