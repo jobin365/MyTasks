@@ -31,7 +31,8 @@ function CreateList(props) {
         elevation={3}
         className="createListTopContainer"
         style={{
-          padding:"25px",
+          paddingTop:"25px",
+          paddingBottom:"25px",
           margin: "25px 0 0",
           display: "flex",
           justifyContent: "space-evenly",
@@ -44,7 +45,7 @@ function CreateList(props) {
           label="Add list"
           value={userInput}
           onChange={handleTextChange}
-          variant="standard"
+          variant="outlined"
         />
         {buttonVisible ? (
           <Fab color="primary" aria-label="add" onClick={handleUserClick}>
