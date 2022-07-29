@@ -1,11 +1,19 @@
 .listEdit{
-    height: 200px;
-    width: 250px;
+    height: 250px;
+    width: 275px;
     margin-top: 125px;
     margin-left: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+.buttons{
+    height: 45px;
+    padding: 0px;
+}
+.logoutButton{
+    width: 225px;
+    background-color: #D61C4E;
 }
 @media screen and (max-width: 600px){
     .listEdit{

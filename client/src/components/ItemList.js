@@ -43,7 +43,7 @@ function ItemList(props) {
           style={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "space-evenly",
+            justifyContent: "space-around",
             marginTop: "10px",
             marginBottom: "10px",
           }}
@@ -53,7 +53,7 @@ function ItemList(props) {
             label="Add item"
             value={userInput}
             onChange={handleTextChange}
-            variant="standard"
+            variant="outlined"
           />
           <Fab color="primary" aria-label="add" onClick={handleClick}>
             <AddIcon />

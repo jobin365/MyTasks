@@ -19,26 +19,37 @@ function App() {
   const [addOrEdit, setAddOrEdit] = useState();
   const handleOpen = () => setModalOpen(true);
   const handleClose = () => setModalOpen(false);
-  const [userLoggedin,setLogin] = useState(false);
+  const [userLoggedin, setLogin] = useState(false);
 
   const ref = useRef(null);
 
-  Axios.defaults.baseURL = "https://sleepy-ridge-02151.herokuapp.com";
-  // Axios.defaults.baseURL = "http://localhost:3000";
+  // Axios.defaults.baseURL = "https://sleepy-ridge-02151.herokuapp.com";
+  Axios.defaults.baseURL = "http://localhost:3001";
+  Axios.defaults.withCredentials = true;
 
-  useEffect(() => {
-    console.log("first effect triggered");
+  useEffect(()=>{
+    Axios.get("/checkLoginStatus",{ withCredentials: true }).then((res)=>{
+      setLogin(res.data.status);
+      Axios.get("/getListList").then((res) => {
+        setListList(res.data.lists);
+      });
+      Axios.get("/getFirstList").then((res) => {
+        changeList(res.data.id);
+      });
+    })
+  },[]);
+
+  function checkLoginStatus(){
+    Axios.get("/checkLoginStatus",{ withCredentials: true }).then((res)=>{
+      setLogin(res.data.status);
+    });
     Axios.get("/getListList").then((res) => {
       setListList(res.data.lists);
     });
-  }, []);
-
-  useEffect(() => {
-    console.log("second effect triggered");
     Axios.get("/getFirstList").then((res) => {
       changeList(res.data.id);
     });
-  }, []);
+  }
 
   function deleteItem(itemIndex) {
     listItems.splice(itemIndex, 1);
@@ -52,7 +63,6 @@ function App() {
 
   function addItem(item) {
     setListItems([...listItems, item]);
-
     const url = "/addItem/".concat(listID);
     Axios.patch(url, { item: item }).then((res) => {
       console.log(res);
@@ -61,7 +71,6 @@ function App() {
 
   function changeList(id) {
     return new Promise((resolve, rej) => {
-      console.log("who does not like a change");
       const url = "/getList/".concat(id);
       Axios.get(url).then((res) => {
         setListName(res.data.name);
@@ -84,7 +93,7 @@ function App() {
     const url = "/createList";
     Axios.post(url, { listName: listName }).then((res) => {
       changeList(res.data.id);
-      setListList([...listList, { id: res.data.id, name: listName }]);
+      setListList([...listList, { _id: res.data.id, name: listName }]);
       ref.current.complete();
     });
   }
@@ -94,9 +103,11 @@ function App() {
     console.log("delete list triggered");
     const url = "/deleteList/".concat(listID);
     Axios.delete(url, { listID: listID }).then((res) => {
+      console.log("delete then triggered");
       Axios.get("/getFirstList").then((res) => {
+        console.log("got first list");
         changeList(res.data.id);
-        const newListList = listList.filter((list) => list.id !== listID);
+        const newListList = listList.filter((list) => list._id !== listID);
         setListList([...newListList]);
         ref.current.complete();
       });
@@ -110,7 +121,7 @@ function App() {
     Axios.patch(url, { newListName: newName }).then((res) => {
       setListName(newName);
       listList.forEach((list) => {
-        if (list.id === listID) list.name = newName;
+        if (list._id == listID) list.name = newName;
       });
       setListList(listList);
       ref.current.complete();
@@ -133,56 +144,70 @@ function App() {
     handleOpen();
   }
 
-  return userLoggedin? (
-    listList ? (
-      listList.length !== 0 ? (
-        <div className="topContainer">
-          <LoadingBar color="#f11946" ref={ref} />
-          <div>
-            {listName && <ListTitle listName={listName} />}
-            {listItems && (
-              <ItemList
-                listItems={listItems}
-                deleteItem={deleteItem}
-                addItem={addItem}
+  function logout(){
+    Axios.get("/logout").then((res)=>{
+      checkLoginStatus();
+    })
+  }
+
+  return userLoggedin!==null? (
+    userLoggedin === true ? (
+      listList ? (
+        listList.length !== 0 ? (
+          <div className="topContainer">
+            <LoadingBar color="#f11946" ref={ref} />
+            <div>
+              {listName && <ListTitle listName={listName} />}
+              {listItems && (
+                <ItemList
+                  listItems={listItems}
+                  deleteItem={deleteItem}
+                  addItem={addItem}
+                />
+              )}
+            </div>
+            {listName && listItems && listID && listList && (
+              <ListEdit
+                selectedName={listName}
+                selectedID={listID}
+                listList={listList}
+                listChange={changeListFromOptions}
+                handleAddIcon={handleAddIconClick}
+                handleDeleteIcon={deleteList}
+                handleEditIcon={handleEditIconClick}
+                logout={logout}
               />
             )}
-          </div>
-          {listName && listItems && listID && listList && (
-            <ListEdit
-              selectedName={listName}
-              selectedID={listID}
-              listList={listList}
-              listChange={changeListFromOptions}
-              handleAddIcon={handleAddIconClick}
-              handleDeleteIcon={deleteList}
-              handleEditIcon={handleEditIconClick}
-              ref={ref}
+            <NameInputModal
+              open={modalOpen}
+              handleOpen={handleOpen}
+              handleClose={handleClose}
+              handleOKButtonClick={handleOKButtonClick}
             />
-          )}
-          <NameInputModal
-            open={modalOpen}
-            handleOpen={handleOpen}
-            handleClose={handleClose}
-            handleOKButtonClick={handleOKButtonClick}
-          />
-        </div>
+          </div>
+        ) : (
+          <div className="topContainer" style={{ alignItems: "center" }}>
+            <LoadingBar color="#f11946" ref={ref} />
+            <CreateList createList={createList} />
+          </div>
+        )
       ) : (
         <div className="topContainer" style={{ alignItems: "center" }}>
-          <LoadingBar color="#f11946" ref={ref} />
-          <CreateList createList={createList} />
+          <div style={{ marginTop: "125px" }}>
+            <LoadingSpin size="30px" />
+          </div>
         </div>
       )
     ) : (
       <div className="topContainer" style={{ alignItems: "center" }}>
-        <div style={{ marginTop: "125px" }}>
-          <LoadingSpin size="30px" />
-        </div>
+        <RegisterOrLogin checkStatus={checkLoginStatus}/>
       </div>
     )
   ) : (
     <div className="topContainer" style={{ alignItems: "center" }}>
-      <RegisterOrLogin />
+      <div style={{ marginTop: "125px" }}>
+        <LoadingSpin size="30px" />
+      </div>
     </div>
   );
 }

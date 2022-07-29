@@ -1,13 +1,16 @@
 import React, { useState } from "react";
-import ListTitle from "./ListTitle";
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import "./RegisterOrLogin.css";
 import Button from "@mui/material/Button";
+import Axios from "axios";
+import Alert from '@mui/material/Alert';
 
-export default function RegisterOrLogin() {
+export default function Login(props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showAlert,setShowAlert]=useState(false);
+  const [errorMessage,setErrorMessage]=useState("");
 
   function handleUsernameChange(event) {
     setUsername(event.target.value);
@@ -15,6 +18,32 @@ export default function RegisterOrLogin() {
 
   function handlePasswordChange(event) {
     setPassword(event.target.value);
+  }
+
+  function handleLogin(event){
+    Axios.post("/login",{username:username,password:password}).then((res)=>{
+      console.log(res);
+      if(res.data.login==="success"){
+        props.checkStatus();
+      }else{
+        setErrorMessage(res.data.error);
+        setShowAlert(true);
+      }
+    }).catch((err)=>{
+      setErrorMessage("Check if username or password is correct");
+      setShowAlert(true);
+    })
+  
+  }
+  function handleRegister(event){
+    Axios.post("/register",{username:username,password:password}).then((res)=>{
+      if(res.data.register==="failed"){
+        setErrorMessage(res.data.error);
+        setShowAlert(true);
+      }else{
+        props.checkStatus();
+      }
+    })
   }
 
   return (
@@ -26,7 +55,13 @@ export default function RegisterOrLogin() {
         width: "400px",
       }}
     >
-      <ListTitle listName="Register/Login" />
+      <Paper
+        elevation={3}
+        className="title"
+        style={{ backgroundColor: "#9A86A4", color: "white" }}
+      >
+        Login
+      </Paper>
       <Paper
         elevation={3}
         className="roltopContainer"
@@ -37,6 +72,7 @@ export default function RegisterOrLogin() {
           justifyContent: "space-evenly",
           alignItems: "center",
           flexWrap: "wrap",
+          marginBottom:"25px"
         }}
       >
         <TextField
@@ -45,7 +81,7 @@ export default function RegisterOrLogin() {
           label="Username"
           value={username}
           onChange={handleUsernameChange}
-          variant="standard"
+          variant="outlined"
         />
         <TextField
           style={{ marginBottom: "20px" }}
@@ -53,17 +89,18 @@ export default function RegisterOrLogin() {
           label="Password"
           value={password}
           onChange={handlePasswordChange}
-          variant="standard"
+          variant="outlined"
         />
-      </Paper>
-      <div className="lorButtons">
-        <Button className="lorButton" variant="contained">
+        <div className="lorButtons">
+        <Button className="lorButton" variant="contained" onClick={handleLogin}>
           Login
         </Button>
-        <Button className="lorButton" variant="contained">
+        <Button className="lorButton" variant="contained" onClick={handleRegister}>
           Register
         </Button>
       </div>
+      </Paper>
+      {showAlert?<Alert severity="error">{errorMessage}</Alert>:null}
     </div>
   );
 }

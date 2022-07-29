@@ -9,6 +9,8 @@ import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 
 function ListEdit(props) {
 
@@ -18,7 +20,7 @@ function ListEdit(props) {
 
   return (
     <Paper className="listEdit" elevation={3}>
-      <FormControl variant="standard" style={{ width: "200px" }}>
+      <FormControl variant="outlined" style={{ width: "225px" }}>
         <InputLabel id="demo-simple-select-label">List</InputLabel>
           <Select
           labelId="demo-simple-select-label"
@@ -28,7 +30,7 @@ function ListEdit(props) {
         >
           {props.listList.map((list, index) => {
               return (
-                <MenuItem value={list.id} key={index}>
+                <MenuItem value={list._id} key={index}>
                   {list.name}
                 </MenuItem>
               );
@@ -43,16 +45,20 @@ function ListEdit(props) {
             marginTop: "35px",
           }}
         >
-          <Fab color="primary" aria-label="add" onClick={props.handleAddIcon}>
+          <Button className="buttons" variant="contained" onClick={props.handleAddIcon}>
             <AddIcon />
-          </Fab>
-          <Fab color="primary" aria-label="add" onClick={props.handleEditIcon}>
+          </Button>
+          <Button className="buttons" variant="contained" onClick={props.handleEditIcon}>
             <EditIcon />
-          </Fab>
-          <Fab color="primary" aria-label="add" onClick={props.handleDeleteIcon}>
+            </Button>
+          <Button className="buttons" variant="contained" onClick={props.handleDeleteIcon}>
             <DeleteIcon />
-          </Fab>
+            </Button>
+          
         </div>
+        <Button className="logoutButton" variant="contained" style={{marginTop:"20px",backgroundColor:"#D61C4E"}} onClick={props.logout}>
+            Logout
+          </Button>
       </FormControl>
     </Paper>
   );
