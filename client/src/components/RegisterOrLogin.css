@@ -22,3 +22,6 @@
     display: flex;
     justify-content: space-between;
 }
+.googleButton{
+    width: 300px;
+}

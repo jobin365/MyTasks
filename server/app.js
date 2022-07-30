@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const app = express();
-const port = 3001;
+const port = 3000;
 const mongoose = require("mongoose");
 const path = require("path");
 
@@ -11,7 +11,8 @@ const passportLocalMongoose = require("passport-local-mongoose");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const findOrCreate = require("mongoose-findorcreate");
 
-mongoose.connect("mongodb://localhost:27017/gidDB");
+// mongoose.connect("mongodb://localhost:27017/gidDB");
+mongoose.connect("mongodb+srv://jobin-admin:ArDiMPeJY4Fq5g@cluster0.1ktsf.mongodb.net/gidDB?retryWrites=true&w=majority");
 app.use(express.json());
 
 app.use(express.static(path.join(__dirname, "build")));
@@ -19,7 +20,7 @@ app.use(express.static(path.join(__dirname, "build")));
 const List = mongoose.model("List", { name: String, items: [] });
 
 app.use((req, res, next) => {
-  res.append("Access-Control-Allow-Origin", ["http://localhost:3000"]);
+  res.append("Access-Control-Allow-Origin", ["https://sleepy-ridge-02151.herokuapp.com"]);
   res.append("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,PATCH");
   res.append("Access-Control-Allow-Headers", "Content-Type");
   res.append("Access-Control-Allow-Credentials", "true");
@@ -88,7 +89,7 @@ app.get(
 
 app.get(
   "/auth/google/secrets",
-  passport.authenticate("google", { failureRedirect: "/login" }),
+  passport.authenticate("google", { failureRedirect: "/" }),
   function (req, res) {
     res.send({login:"success"});
   }

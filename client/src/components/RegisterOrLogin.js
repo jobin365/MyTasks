@@ -5,6 +5,7 @@ import "./RegisterOrLogin.css";
 import Button from "@mui/material/Button";
 import Axios from "axios";
 import Alert from '@mui/material/Alert';
+import googleLogo from "./images/google.png";
 
 export default function Login(props) {
   const [username, setUsername] = useState("");
@@ -22,7 +23,6 @@ export default function Login(props) {
 
   function handleLogin(event){
     Axios.post("/login",{username:username,password:password}).then((res)=>{
-      console.log(res);
       if(res.data.login==="success"){
         props.checkStatus();
       }else{
@@ -35,6 +35,18 @@ export default function Login(props) {
     })
   
   }
+
+  function handleGoogleLogin(){
+    Axios.get("/auth/google",{ withCredentials: true }).then((res)=>{
+      if(res.data.login==="success"){
+        props.checkStatus();
+      }
+    }).catch((err)=>{
+      setErrorMessage("An error occured, try again later");
+      setShowAlert(true);
+    })
+  }
+
   function handleRegister(event){
     Axios.post("/register",{username:username,password:password}).then((res)=>{
       if(res.data.register==="failed"){
@@ -99,6 +111,12 @@ export default function Login(props) {
           Register
         </Button>
       </div>
+      <a href="/auth/google" style={{textDecoration:"none"}}>
+      <Button variant="outlined" className="googleButton" style={{marginTop:"20px"}}>
+        <img style={{width:"33px",height:"34px",marginRight:"10px"}} src={googleLogo}></img>
+        Login with Google
+      </Button>
+      </a>
       </Paper>
       {showAlert?<Alert severity="error">{errorMessage}</Alert>:null}
     </div>
