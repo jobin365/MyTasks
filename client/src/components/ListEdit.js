@@ -59,7 +59,7 @@ function ListEdit(props) {
         <Button className="logoutButton" variant="contained" style={{marginTop:"20px",backgroundColor:"#D61C4E"}} onClick={props.logout}>
             Logout
         </Button>
-        <span className="usernameInfo">Logged in as {props.username}</span>
+        <span className="usernameInfo">{props.username}</span>
       </FormControl>
     </Paper>
   );

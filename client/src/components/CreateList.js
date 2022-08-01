@@ -55,10 +55,10 @@ function CreateList(props) {
         ) : (
           <LoadingSpin size="30px" />
         )}
-        <div style={{width:"350px",height:"50px",display:"flex",alignItems:"center",marginTop:"20px",justifyContent:"space-between"}}>
+        <div className="usernameLogout">
         
         <div>
-        <span style={{color:"#1565c0",textAlign:"left"}} className="usernameInfo">Logged in as {props.username}</span>
+        <span style={{color:"#1565c0",textAlign:"left"}} className="usernameInfo">{props.username}</span>
         </div>
         <Button className="logoutButtonEmptyList" variant="contained" style={{backgroundColor:"#D61C4E"}} onClick={props.logout}>
             Logout
