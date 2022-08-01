@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import Axios from "axios";
 import Alert from '@mui/material/Alert';
 import googleLogo from "./images/google.png";
+import LoadingBar from "react-top-loading-bar";
 
 export default function Login(props) {
   const [username, setUsername] = useState("");
@@ -22,6 +23,7 @@ export default function Login(props) {
   }
 
   function handleLogin(event){
+    props.load.current.continuousStart();
     Axios.post("/login",{username:username,password:password}).then((res)=>{
       if(res.data.login==="success"){
         props.checkStatus();
@@ -32,15 +34,18 @@ export default function Login(props) {
     }).catch((err)=>{
       setErrorMessage("Check if username or password is correct");
       setShowAlert(true);
+      props.load.current.complete();
     })
   
   }
 
   function handleRegister(event){
+    props.load.current.continuousStart();
     Axios.post("/register",{username:username,password:password}).then((res)=>{
       if(res.data.register==="failed"){
         setErrorMessage(res.data.error);
         setShowAlert(true);
+        props.load.current.complete();
       }else{
         props.checkStatus();
       }

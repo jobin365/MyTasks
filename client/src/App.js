@@ -50,6 +50,7 @@ function App() {
       if(res.data.status){
         setUsername(res.data.username);
       }
+      ref.current.complete();
     });
     Axios.get("/getListList").then((res) => {
       setListList(res.data.lists);
@@ -153,6 +154,7 @@ function App() {
   }
 
   function logout(){
+    ref.current.continuousStart();
     Axios.get("/logout").then((res)=>{
       checkLoginStatus();
     })
@@ -202,6 +204,7 @@ function App() {
         )
       ) : (
         <div className="topContainer" style={{ alignItems: "center" }}>
+          <LoadingBar color="#f11946" ref={ref} />
           <div style={{ marginTop: "125px" }}>
             <LoadingSpin size="30px" />
           </div>
@@ -209,7 +212,8 @@ function App() {
       )
     ) : (
       <div className="topContainer" style={{ alignItems: "center" }}>
-        <RegisterOrLogin checkStatus={checkLoginStatus}/>
+        <LoadingBar color="#f11946" ref={ref} />
+        <RegisterOrLogin checkStatus={checkLoginStatus} load={ref}/>
       </div>
     )
   ) : (
