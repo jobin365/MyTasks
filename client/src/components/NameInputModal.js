@@ -55,7 +55,7 @@ export default function NameInputModal(props) {
             width:"300px"
           }}
         >
-          <TextField value={userInput} variant="standard" style={{ width: "210px" }} label="List Name" onChange={handleUserInputChange}/>
+          <TextField value={userInput} variant="outlined" style={{ width: "210px" }} label="List Name" onChange={handleUserInputChange}/>
           <Fab color="primary" aria-label="add" onClick={handleButtonClick}>
             <DoneIcon />
           </Fab>
