@@ -13,7 +13,7 @@ const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const findOrCreate = require("mongoose-findorcreate");
 
 mongoose.connect("mongodb://localhost:27017/gidDB");
-// mongoose.connect("mongodb+srv://jobin-admin:<password>@cluster0.1ktsf.mongodb.net/?retryWrites=true&w=majority");
+// mongoose.connect("mongodb+srv://jobin-admin:<password>@cluster0.1ktsf.mongodb.net/gidDB?retryWrites=true&w=majority");
 app.use(express.json());
 
 app.use(express.static(path.join(__dirname, "build")));
