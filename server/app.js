@@ -73,7 +73,7 @@ passport.use(
       callbackURL:"http://localhost:3001/auth/google/secrets"
     },
     function (accessToken, refreshToken, profile, cb) {
-      User.findOrCreate({ googleId: profile.id,username:profile.displayName }, function (err, user) {
+      User.findOrCreate({ googleId: profile.id,username:profile.emails[0].value }, function (err, user) {
         return cb(err, user);
       });
     }
@@ -86,7 +86,7 @@ app.get("/", function (req, res) {
 
 app.get(
   "/auth/google",
-  passport.authenticate("google", { scope: ["profile"] })
+  passport.authenticate("google", { scope: ["profile","email"] })
 );
 
 app.get(

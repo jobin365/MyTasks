@@ -25,8 +25,8 @@ function App() {
   const ref = useRef(null);
   
 
-  // Axios.defaults.baseURL = "https://sleepy-ridge-02151.herokuapp.com";
-  Axios.defaults.baseURL = "http://localhost:3001";
+  Axios.defaults.baseURL = "https://sleepy-ridge-02151.herokuapp.com";
+  // Axios.defaults.baseURL = "http://localhost:3001";
   Axios.defaults.withCredentials = true;
 
   useEffect(()=>{

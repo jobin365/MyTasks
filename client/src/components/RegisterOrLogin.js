@@ -88,6 +88,7 @@ export default function Login(props) {
           value={username}
           onChange={handleUsernameChange}
           variant="outlined"
+          type="email"
         />
         <TextField
           style={{ marginBottom: "20px" }}
@@ -96,6 +97,7 @@ export default function Login(props) {
           value={password}
           onChange={handlePasswordChange}
           variant="outlined"
+          type="password"
         />
         <div className="lorButtons">
         <Button className="lorButton" variant="contained" onClick={handleLogin}>
@@ -105,8 +107,8 @@ export default function Login(props) {
           Register
         </Button>
       </div>
-      {/* <a href="/auth/google" style={{textDecoration:"none"}}> */}
-      <a href="http://localhost:3001/auth/google" style={{textDecoration:"none"}}>
+      <a href="/auth/google" style={{textDecoration:"none"}}>
+      {/* <a href="http://localhost:3001/auth/google" style={{textDecoration:"none"}}> */}
       <Button variant="outlined" className="googleButton" style={{marginTop:"20px"}}>
         <img style={{width:"33px",height:"34px",marginRight:"10px"}} src={googleLogo}></img>
         Login with Google
